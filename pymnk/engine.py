@@ -23,7 +23,7 @@ def mnk_move(game: MNKType, move) -> None:
     if type(game) is Connect6:
         game.move_sequence(move)
     elif type(game) is WildTicTacToe or type(game) is OrderAndChaos:
-        game.legal_wild_moves(*move)
+        game.wild_move(*move)
     elif hasattr(game, "legal_moves"):
         game.move(*move)
     else:
