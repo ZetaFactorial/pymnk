@@ -65,7 +65,7 @@ Checking wins and draws
 >>> ttt.result()
 <Result.WIN: 1>
 
->>> tt.get_winner()
+>>> ttt.get_winner()
 <Piece.X: 1>
 ```
 
