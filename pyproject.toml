@@ -1,0 +1,44 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "pymnk"
+dynamic = ["version"]
+authors = [
+  {name = "Zeta Factorial" },
+]
+readme = "README.md"
+license = {text = "MIT"}
+description = "Python library for k-in-a-row family of games"
+keywords=["tic-tac-toe", "ultimate-tic-tac-toe", "gomoku", "connect6", "pente"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Games/Entertainment :: Board Games",
+    "Topic :: Games/Entertainment :: Turn Based Strategy",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+requires-python = ">=3.10"
+
+
+[project.urls]
+"Homepage" = "https://github.com/ZetaFactorial/pymnk"
+"Bug Tracker" = "https://github.com/ZetaFactorial/pymnk/issues"
+
+
+[tool.setuptools.dynamic]
+version = {attr = "pymnk.__version__"}
+
+
+[tool.setuptools.package-data]
+pymnk = ["py.typed"]
