@@ -25,6 +25,13 @@ class TestTTT(unittest.TestCase):
         g[0,0], g[1,2], g[0,1], g[0,2], g[1,0], g[1,1] = X, X, O, O, O, O
         lines = [X, O, O], [O, O, X], [X, O], [O, O], [O, X], [X], [O, O], [O, O], [X], [O], [X, O], [O, X], [O]
         self.assertCountEqual(g._lines(), lines)
+        self.assertTrue(TicTacToe()._check_line_winned([1,0,1,1,1,0]))
+        self.assertTrue(TicTacToe()._check_line_winned([1,1,0,0,1,1,1]))
+        self.assertTrue(TicTacToe()._check_line_winned([1,1,0,1,1,0,1,1,1]))
+        self.assertTrue(TicTacToe()._check_line_winned([1,0,0,1,1,0,1,1,1,0]))
+        self.assertTrue(TicTacToe()._check_line_winned([0,1,1,1,0,1,1]))
+        self.assertFalse(TicTacToe()._check_line_winned([1,0,0,0,1,0,1,0,0,1,1]))
+        self.assertFalse(TicTacToe()._check_line_winned([1,0,1,0,1,1,0]))
 
     def test_fen(self):
         b1 = TicTacToe(3, 3); b1.move(0,1); b1.move(2,0)
