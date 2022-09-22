@@ -125,13 +125,15 @@ class TicTacToe:
             return False
         
         for i, _ in enumerate(line[:1-self.k]):
-            next_k_squares = line[i:i+self.k]
             flag = True
-            for square in next_k_squares:
+            
+            next_k_squares = line[i:i+self.k]
+
+            for square in next_k_squares:  
                 if not square*next_k_squares[0] or square != next_k_squares[0]:
                     flag = False
-                    i += self.k
                     continue
+            
             if flag:
                 return True
         
