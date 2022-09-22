@@ -123,14 +123,18 @@ class TicTacToe:
     def _check_line_winned(self, line: list[Piece]) -> bool:
         if self.k > len(line):
             return False
-
-        for i in range(len(line)-self.k+1):
+        
+        for i, _ in enumerate(line[:1-self.k]):
             next_k_squares = line[i:i+self.k]
-            if Piece.E in next_k_squares:
-                continue
-            if all(square==next_k_squares[0] for square in next_k_squares):
+            flag = True
+            for square in next_k_squares:
+                if not square*next_k_squares[0] or square != next_k_squares[0]:
+                    flag = False
+                    i += self.k
+                    continue
+            if flag:
                 return True
-
+        
         return False
 
     def _is_filled(self) -> bool:
