@@ -5,7 +5,7 @@ Pymnk is a Python library for k-in-a-row family of games, including:
 - Pente
 - Connect6
 - Ultimate tic-tac-toe
-- Some tic-tac-toe variants (Order and chaos, Misere, Impartial, Wild)
+- Some tic-tac-toe variants
 
 ## Features
 - Most of the games support N players, n-by-m board including ∞-by-∞ with k-in-a-row to win.
@@ -15,32 +15,20 @@ Pymnk is a Python library for k-in-a-row family of games, including:
 - Engine evaluation
 
 ## Installing
-Install the latest release using pip:
+Install the latest release using pip
 ```
 pip install pymnk
 ```
 
 ## Usage
 
-Initializing games
+Initializing game instances
 ```python
 >>> from pymnk import *
-
 >>> ttt = TicTacToe(m=3, n=3, k=3, infinite=False, players=2)
-
->>> mis = MisereTicTacToe(m=3, n=3, k=3, infinite=False, players=2)
-
->>> imp = ImpartialTicTacToe(m=3, n=3, k=3, infinite=False, players=2)
-
 >>> pente = Pente(m=19, n=19, k=5, infinite=False, players=2)
-
 >>> connect6 = Connect6(m=19, n=19, k=6, p=2, q=1, infinite=False)
-
 >>> ult = UltimateTicTacToe(m=3, n=3, k=3, which_local_board=(0,0), players=2)
-
->>> wild = WildTicTacToe(m=3, n=3, k=3, infinite=False, players=2)
-
->>> oac = OrderAndChaos(m=4, n=4, k=3, infinite=False)
 ```
 
 Making moves
@@ -52,12 +40,10 @@ Making moves
 >>> ttt.move(0,0)
 ```
 
-Some games have their own format of moves
+Some games have their own methods for moves:
 ```python
 >>> connect6.move_sequence([(0,1)])
 >>> connect6.move_sequence([(2,2), (3,2)])
->>> wild.wild_move(1, 1, Piece.X)
->>> oac.wild_move(2, 3, Piece.X)
 ```
 
 Checking wins and draws
@@ -111,7 +97,7 @@ Showing a fancy Unicode board
 🟩🟩⬛
 ```
 
-Resetting board
+Resetting a board
 ```python
 >>> ttt.reset()
 >>> ttt
