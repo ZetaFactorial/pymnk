@@ -124,7 +124,7 @@ class Gomoku:
     )
     _directions = ((1, 1), (0, 1), (1, 0))
 
-    def __init__(self, k: int = 3, bounds: CoordinateBounds | None = None) -> None:
+    def __init__(self, k: int = 5, bounds: CoordinateBounds | None = None) -> None:
         self._k: int = k
         self.board = Board(bounds=bounds)
         self.turn = Color.WHITE
