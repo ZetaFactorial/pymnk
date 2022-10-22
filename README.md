@@ -1,18 +1,6 @@
-# pymnk: library for k-in-a-row games
+# pymnk
 ## Introduction
-Pymnk is a Python library for k-in-a-row family of games, including:
-- (m,n,k)-game
-- Pente
-- Connect6
-- Ultimate tic-tac-toe
-- Some tic-tac-toe variants
-
-## Features
-- Most of the games support N players, n-by-m board including ∞-by-∞ with k-in-a-row to win.
-- Legal move generation, checking wins and draws
-- Tracking board history and reverting moves
-- Creating and parsing FEN
-- Engine evaluation
+Pymnk is a Python library for k-in-a-row games: Gomoku, Pente and Connect6.
 
 ## Installing
 Install the latest release using pip
@@ -22,86 +10,105 @@ pip install pymnk
 
 ## Usage
 
-Initializing game instances
+Initialize game instances
 ```python
->>> from pymnk import *
->>> ttt = TicTacToe(m=3, n=3, k=3, infinite=False, players=2)
->>> pente = Pente(m=19, n=19, k=5, infinite=False, players=2)
->>> connect6 = Connect6(m=19, n=19, k=6, p=2, q=1, infinite=False)
->>> ult = UltimateTicTacToe(m=3, n=3, k=3, which_local_board=(0,0), players=2)
+>>> from pymnk import Gomoku, Pente, Connect6
+>>> from pymnk import CoordinateBounds
+>>> g = Gomoku(bounds=CoordinateBounds((1,19), (1,19)), k=5)
+>>> p = Pente(bounds=CoordinateBounds((1,19), (1,19)), k=5, maxcaptures=10, capturelen=3)
+>>> c = Connect6(bounds=CoordinateBounds((1,19), (1,19)), k=5)
 ```
 
-Making moves
+Verify and make moves, revert moves
 ```python
->>> ttt.move(0,1)
->>> ttt.move(1,1)
->>> ttt.move(0,2)
->>> ttt.move(2,2)
->>> ttt.move(0,0)
+>>> g.is_legal_move((-3, 6))
+False
+>>> g.make_move((1,1))
+(1, 1)
+>>> g.pop()
+((1, 1), <Color.WHITE: 0>)
 ```
 
-Some games have their own methods for moves:
+Method `make_move` also takes additional parameters `color` and `changeturn`
 ```python
->>> connect6.move_sequence([(0,1)])
->>> connect6.move_sequence([(2,2), (3,2)])
+>>> from pymnk import Color
+>>> g = Gomoku()
+>>> g.make_move(move=(1,2), color=Color.BLACK, changeturn=False)
+(1, 2)
+>>> g.turn
+<Color.WHITE: 0>
+>>> g.history
+[((1, 2), <Color.BLACK: 1>)]
 ```
 
-Checking wins and draws
-```python
->>> ttt.result()
-<Result.WIN: 1>
 
->>> ttt.get_winner()
-<Piece.X: 1>
+Class `CoordinateBounds` restricts `x` and `y` coordinates on the rectangular board. You can assigning a bound to `None` to make a coordinate unbounded
+```python
+>>> g = Gomoku(bounds=CoordinateBounds((1, None), (None, 25)))
+>>> g.make_move((2000, -100))
+(2000, -100)
+```
+Parameter `bounds` may be omitted. That would make the board unbounded
+```python
+>>> g = Gomoku()
+>>> g.make_move((1000000, -9999999999))
+(1000000, -9999999999)
 ```
 
-Getting board history and reverting moves
+Get the result of a game
 ```python
->>> ttt.pop()
->>> ttt.move_history
-[(0, 1), (1, 1), (0, 2), (2, 2)]
+>>> g = Gomoku(bounds=CoordinateBounds((1,19), (1,19)), k=2)
+>>> g.make_move((1,1))
+(1, 1)
+>>> g.make_move((1,2))
+(1, 2)
+>>> g.make_move((2,2))
+(2, 2)
+>>> g.get_winner_by_connect()
+<Color.WHITE: 0>
+>>> g.get_result()
+<Outcome.WHITE_WIN: 0>
 ```
 
-Creating and parsing FEN
+Class `Pente` is inherited from `Gomoku` and simply allows you to perform custodial captures
 ```python
->>> ttt.fen
-'1XX/1O1/2O X 3'
+>>> g = Pente(k=5, maxcaptures=2, bounds=CoordinateBounds((1,13), (1,13)))
+>>> g.make_move((1,1))
+(1, 1)
+>>> g.make_move((2,2))
+(2, 2)
+>>> g.make_move((5,10))
+(5, 10)
+>>> g.make_move((3,3))
+(3, 3)
+>>> g.make_move((4,4))
+(4, 4)
+>>> g.make_captures_at((4,4))
+[(3, 3), (2, 2)]
+>>> g.get_winner_by_captures()
+<Color.WHITE: 0>
 ```
 
+Class `Connect6` also inherits from `Gomoku` and allows you to make more than one move at a time
 ```python
->>> print(Pente.from_fen('XX1/O1O/3 X 3'))
-XX.
-O.O
-...
+>>> c = Connect6(k=6, bounds=CoordinateBounds((1,19), (1,19)))
+>>> c.make_multimove((1,1), (3,3))
+((1, 1), (3, 3))
 ```
 
-Showing a simple ASCII board
+Show a simple ASCII representation of the board
 ```python
->>> print(ttt)
-.XX
-.O.
-..O
-```
-
-Getting legal moves
-```python
->>> print(list(ttt.legal_moves()))
-[(0, 0), (1, 0), (1, 2), (2, 0), (2, 1)]
-```
-
-Showing a fancy Unicode board
-```python
->>> print(ttt.unicode())
-🟩⬜⬜
-🟩⬛🟩
-🟩🟩⬛
-```
-
-Resetting a board
-```python
->>> ttt.reset()
->>> ttt
-TicTacToe.from_fen('3/3/3 X 1')
+>>> g = Connect6()
+>>> g.make_multimove((1,1), (2,5), (-1,3))
+((1, 1), (2, 5), (-1, 3))
+>>> g.make_multimove((1,4), (5,3), (-1,2))
+((1, 4), (5, 3), (-1, 2))
+>>> print(g)
+...W...
+..B....
+W.....B
+B......
+..W....
 ```
 
 ## License
