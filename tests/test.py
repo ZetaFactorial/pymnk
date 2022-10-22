@@ -1,148 +1,113 @@
+import unittest
+
+from pymnk.mnk import *
 
 
-
-# import unittest
-# import itertools
-
-# from pymnk.mnk import *
-
-# class TestTTT(unittest.TestCase):
-#     def test_finite_dimensions(self):
-#         for (m,n,k) in itertools.product(range(1,6), repeat=3):
-#             g = TicTacToe(m,n,k)
-#             for (i,j) in itertools.product(range(n), range(m)):
-#                 g[i,j] = Piece.X
-#             g[0,0] = Piece.O
-#             self.assertEqual(g._flat(), [Piece.O]+[Piece.X]*(m*n-1))
-
-#     def test_infinite_dimensions(self):
-#         g = TicTacToe(m=1, n=1, infinite=True)
-#         for (i,j) in itertools.product(range(20), range(20)):
-#             g[i,j] = Piece.X
-#         self.assertCountEqual(g._flat(), [Piece.X]*(400))
-
-#     def test_lines(self):
-#         X = Piece.X
-#         O = Piece.O
-#         g = TicTacToe(m=3, n=2)
-#         g[0,0], g[1,2], g[0,1], g[0,2], g[1,0], g[1,1] = X, X, O, O, O, O
-#         lines = [X, O, O], [O, O, X], [X, O], [O, O], [O, X], [X], [O, O], [O, O], [X], [O], [X, O], [O, X], [O]
-#         self.assertCountEqual(g._lines(), lines)
-#         self.assertTrue(TicTacToe()._check_line_winned([1,0,1,1,1,0]))
-#         self.assertTrue(TicTacToe()._check_line_winned([1,1,0,0,1,1,1]))
-#         self.assertTrue(TicTacToe()._check_line_winned([1,1,0,1,1,0,1,1,1]))
-#         self.assertTrue(TicTacToe()._check_line_winned([1,0,0,1,1,0,1,1,1,0]))
-#         self.assertTrue(TicTacToe()._check_line_winned([0,1,1,1,0,1,1]))
-#         self.assertFalse(TicTacToe()._check_line_winned([1,0,0,0,1,0,1,0,0,1,1]))
-#         self.assertFalse(TicTacToe()._check_line_winned([1,0,1,0,1,1,0]))
-
-#     def test_fen(self):
-#         b1 = TicTacToe(3, 3); b1.move(0,1); b1.move(2,0)
-#         b2 = TicTacToe.from_fen("1X1/3/O2 X 2")
-#         self.assertEqual(b1.board, b2.board)
-#         self.assertEqual(b2.turn, Piece.X)
-#         self.assertEqual(b2.fullmove_number, 2)
-#         self.assertEqual(b2.fen, "1X1/3/O2 X 2")
-#         b3 = TicTacToe.from_fen("3 X 1")
-#         self.assertEqual(b3.m, 3)
-#         self.assertEqual(b3.n, 1)
-
-#     def test_result(self):
-#         g = TicTacToe()
-#         self.assertEqual(g.result(), Result.NOTENDED)
-#         self.assertEqual(g.get_winner(), None)
-#         g = TicTacToe.from_fen("XXX/OO1/3 O 1")
-#         self.assertEqual(g.result(), Result.WIN)
-#         self.assertEqual(g.get_winner(), Piece.X)
-#         g = TicTacToe.from_fen("OOO/XX1/X2 X 1")
-#         self.assertEqual(g.result(), Result.WIN)
-#         self.assertEqual(g.get_winner(), Piece.O)
-#         g = TicTacToe.from_fen("XOX/OOX/XXO X 1")
-#         self.assertEqual(g.result(), Result.DRAW)
-#         self.assertEqual(g.get_winner(), None)
-
-#     def test_move(self):
-#         g = TicTacToe()
-#         for move in [(0,0), (0,1), (0,2), (1,0), (1,1), (1,2)]:
-#             g.move(*move)
-#         g.move(2,0)
-#         self.assertEqual(g.result(), Result.WIN)
-#         g.pop()
-#         self.assertEqual(g.result(), Result.NOTENDED)
-#         self.assertEqual(g.fen, "XOX/OXO/3 X 4")
-
-#     def test_counters(self):
-#         g = TicTacToe.from_fen("XO1/3/3 X 2")
-#         self.assertEqual(g.move_count, 0)
-#         self.assertEqual(g.fullmove_number, 2)
-
-#         g.move(2,2)
-#         self.assertEqual(g.move_count, 1)
-#         self.assertEqual(g.fullmove_number, 2)
-
-#         g.move(2,0)
-#         self.assertEqual(g.move_count, 2)
-#         self.assertEqual(g.fullmove_number, 3)
-
-#         g.pop()
-#         self.assertEqual(g.move_count, 1)
-#         self.assertEqual(g.fullmove_number, 2)
-
-#         g.pop()
-#         self.assertEqual(g.move_count, 0)
-#         self.assertEqual(g.fullmove_number, 2)
-
-# class TestConnect6(unittest.TestCase):
-#     def test_move_seq(self):
-#         g = Connect6(m=5,n=5,k=5,p=3,q=2)
-#         g.move_sequence([(0,1), (0,2)])
-#         self.assertEqual(g.fen, "1XX2/5/5/5/5 O 1")
-#         g.move_sequence([(1,1), (1,2), (1,3)])
-#         self.assertEqual(g.fen, "1XX2/1OOO1/5/5/5 X 2")
-#         g.move_sequence([(0,0), (0,3), (0,4)])
-#         self.assertEqual(g.fen, "XXXXX/1OOO1/5/5/5 O 2")
-
-# class TestPente(unittest.TestCase):
-#     def test_pente_capturing(self):
-#         p = Pente.from_fen("XO2 X 2")
-#         p.move(0,3)
-#         self.assertEqual(p.fen, "XO1X O 2")
-
-#         p = Pente.from_fen("X1O1 X 2")
-#         p.move(0,3)
-#         self.assertEqual(p.fen, "X1OX O 2")
-
-#         p = Pente.from_fen("XOV1 X 2")
-#         p.move(0,3)
-#         self.assertEqual(p.fen, "X2X O 2")
-
-# class TestWildImpartialMisereOrdnchaos(unittest.TestCase):
-#     def test_moves_and_result(self):
-#         wild = WildTicTacToe(2,2,2)
-#         imp = ImpartialTicTacToe(2,2,2)
-#         mis = MisereTicTacToe(2,2,2)
-#         oac = OrderAndChaos(2,2,2)
-#         wild.wild_move(0,0,Piece.O)
-#         imp.move(0,0)
-#         mis.move(0,0)
-#         oac.wild_move(0,0,Piece.X)
-#         self.assertEqual(wild.fen, "O1/2 O 1")
-#         self.assertEqual(imp.fen, "X1/2 O 1")
-#         self.assertEqual(mis.fen, "X1/2 O 1")
-#         wild.wild_move(0,1,Piece.O)
-#         imp.move(0,1)
-#         mis.move(1,0)
-#         mis.move(0,1)
-#         oac.wild_move(0,1,Piece.X)
-#         self.assertEqual(wild.fen, "OO/2 X 2")
-#         self.assertEqual(imp.fen, "XX/2 X 2")
-#         self.assertEqual(mis.fen, "XX/O1 O 2")
-#         self.assertEqual(oac.fen, "XX/2 X 2")
-#         self.assertEqual(wild.get_winner(), 2)
-#         self.assertEqual(imp.get_winner(), 2)
-#         self.assertEqual(mis.get_winner(), 2)
-#         self.assertEqual(oac.get_winner(), 1)
+class TestCoordinateBounds(unittest.TestCase):
+    def test_basic(self):
+        cb = CoordinateBounds((0,5), (-3,0))
+        self.assertTrue(cb.is_in((3,-2)))
+        self.assertTrue(cb.is_in((0,-2)))
+        self.assertFalse(cb.is_in((3,-200)))
+        self.assertFalse(cb.is_in((100,-2)))
+        self.assertFalse(cb.is_in((100,-200)))
+        cb2 = CoordinateBounds((0,None), (None,0))
+        self.assertTrue(cb2.is_in((5,-10)))
+        self.assertFalse(cb2.is_in((-5,0)))
 
 
-# if __name__ == "__main__":
-#     unittest.main()
+class TestBoard(unittest.TestCase):
+    def test_basic(self):
+        b = Board(CoordinateBounds((0,3), (0,3)))
+        b.place(Square((0,1)), Color.WHITE)
+        b.place(Square((1,1)), Color.BLACK)
+        self.assertEqual(b.squares, {Color.WHITE: {(0,1)}, Color.BLACK: {(1,1)}})
+        self.assertTrue(b.is_occupied((1,1), Color.BLACK))
+        self.assertFalse(b.is_empty())
+        self.assertTrue(b.is_empty_square(Square((2,3))))
+    def test_str(self):
+        b = Board(CoordinateBounds((1,3), (1,None)))
+        b.place(Square((2,1)), Color.BLACK)
+        b.place(Square((3,1)), Color.WHITE)
+        b.place(Square((2,2)), Color.BLACK)
+        b.place(Square((1,3)), Color.WHITE)
+        self.assertEqual(str(b), '''W..\n.B.\n.BW\n''')
+
+        
+class TestGomoku(unittest.TestCase):
+    def test_move(self):
+        g = Gomoku(k=3, bounds=CoordinateBounds((1,3), (1,3)))
+        g.make_move(Square((2,2)))
+        self.assertEqual(g.board.squares, {Color.WHITE: {(2,2)}, Color.BLACK: set()})
+        g.make_move(Square((2,3)))
+        self.assertEqual(g.board.squares, {Color.WHITE: {(2,2)}, Color.BLACK: {(2,3)}})
+        self.assertRaises(IllegalMoveError, g.make_move, Square((-100, -100)))
+        self.assertRaises(IllegalMoveError, g.make_move, Square((2, 2)))
+    
+    def test_pop(self):
+        g = Gomoku(k=3, bounds=CoordinateBounds((1,3), (1,3)))
+        g.make_move(Square((2,2)))
+        g.pop()
+        self.assertEqual(g.board.squares, {Color.WHITE: set(), Color.BLACK: set()})
+    
+    def test_win_connect(self):
+        g = Gomoku(k=2, bounds=CoordinateBounds((1,3), (1,3)))
+        g.make_move(Square((1,1)))
+        g.make_move(Square((2,1)))
+        g.make_move(Square((1,2)))
+        self.assertEqual(g.get_result(), Outcome.WHITE_WIN)
+        g = Gomoku(k=2, bounds=CoordinateBounds((1,3), (1,3)))
+        
+    def test_draw(self):
+        g = Gomoku(k=4, bounds=CoordinateBounds((1,2), (1,2)))
+        g.make_move(Square((1,1)))
+        g.make_move(Square((2,1)))
+        g.make_move(Square((1,2)))
+        g.make_move(Square((2,2)))
+        self.assertEqual(g.get_result(), Outcome.DRAW)
+        
+class TestPente(unittest.TestCase):
+    def test_capture_success(self):
+        g = Pente(k=4, maxcaptures=2, bounds=CoordinateBounds((1,10), (1,10)))
+        g.make_move(Square((1,1)))
+        g.make_move(Square((2,2)))
+        g.make_move(Square((10,4)))
+        g.make_move(Square((3,3)))
+        g.make_move(Square((4,4)))
+        g.make_captures_at(Square((4,4)))
+        self.assertEqual(g.board.squares, {Color.WHITE: {(1,1), (4,4), (10,4)}, Color.BLACK: set()})
+
+    def test_capture_fail(self):
+        g = Pente(k=4, bounds=CoordinateBounds((1,10), (1,10)))
+        g.make_move(Square((1,1)))
+        g.make_move(Square((2,2)))
+        g.make_captures_at(Square((2,2)))
+        self.assertEqual(g.board.squares, {Color.WHITE: {(1,1)}, Color.BLACK: {(2,2)}})
+
+    def test_win_captures(self):
+        g = Pente(k=4, maxcaptures=2, bounds=CoordinateBounds((1,10), (1,10)))
+        g.make_move(Square((1,1)))
+        g.make_move(Square((2,2)))
+        g.make_move(Square((10,4)))
+        g.make_move(Square((3,3)))
+        g.make_move(Square((4,4)))
+        g.make_captures_at(Square((4,4)))
+        self.assertEqual(g.get_winner_by_captures(), Outcome(Color.WHITE))
+        self.assertEqual(g.get_result(), Outcome(Color.WHITE))
+
+    def test_pop(self):
+        g = Pente(k=3, bounds=CoordinateBounds((1,3), (1,3)))
+        g.make_move(Square((2,2)))
+        g.pop()
+        self.assertEqual(g.board.squares, {Color.WHITE: set(), Color.BLACK: set()})
+
+class TestConnect6(unittest.TestCase):
+    def test_capture_success(self):
+        g = Connect6(k=4, bounds=CoordinateBounds((1,10), (1,10)))
+        g.make_multimove((1,1), (1,2))
+        g.make_multimove((1,4))
+        self.assertEqual(g.board.squares, {Color.WHITE: {(1,1), (1,2)}, Color.BLACK: {(1,4)}})
+
+
+if __name__ == "__main__":
+    unittest.main()
