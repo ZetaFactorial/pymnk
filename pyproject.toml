@@ -15,7 +15,7 @@ authors = [
 readme = "README.md"
 license = {text = "MIT"}
 description = "Python library for k-in-a-row family of games"
-keywords=["tic-tac-toe", "ultimate-tic-tac-toe", "gomoku", "connect6", "pente"]
+keywords=["tic-tac-toe", "gomoku", "connect6", "pente"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
