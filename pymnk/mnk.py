@@ -128,7 +128,6 @@ class Gomoku:
         self._k: int = k
         self.board = Board(bounds=bounds)
         self.turn = Color.WHITE
-        self.fullmoves = 0
         self.history: list[tuple[Square, Color]] = []
 
     def _lines_intersecting_at(
@@ -166,7 +165,6 @@ class Gomoku:
             raise IllegalMoveError()
         if changeturn:
             self.turn = Color(not self.turn)
-        self.fullmoves += self.turn
         self.history.append((move, color))
         self.board.squares[color].add(move)
         return move
@@ -251,7 +249,6 @@ class Pente(Gomoku):
     def clear(self) -> None:
         self.board.clear()
         self.turn = Color.WHITE
-        self.fullmoves = 0
         self.history: list[tuple[Square, Color]] = []
         self._capturecount = [0, 0]
 
@@ -280,7 +277,6 @@ class Connect6(Gomoku):
             self.history.append((move, color))
         if changeturn:
             self.turn = Color(not self.turn)
-        self.fullmoves += self.turn
         self.history.append((move, color))
         return moves
 
